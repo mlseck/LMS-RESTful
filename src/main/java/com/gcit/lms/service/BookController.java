@@ -82,23 +82,28 @@ public class BookController {
 		return books;
 	}
 	
-	public void setBookAuthor(Book book, Author author) throws SQLException{
+	@RequestMapping(value = "/setBookAuthor", method = RequestMethod.POST, consumes="application/json")
+	public void setBookAuthor(@RequestBody Book book, @RequestBody Author author) throws SQLException{
 		bdao.addAuthorToBook(book, author);
 	}
 	
-	public void setBookGenre(Book book, Genre genre) throws SQLException{
+	@RequestMapping(value = "/setBookGenre", method = RequestMethod.POST, consumes="application/json")
+	public void setBookGenre(@RequestBody Book book, @RequestBody Genre genre) throws SQLException{
 		bdao.addGenreToBook(book, genre);
 	}
 	
-	public void removeBookAuthor(Book book, Author author) throws SQLException{
+	@RequestMapping(value = "/removeBookAuthor", method = RequestMethod.POST, consumes="application/json")
+	public void removeBookAuthor(@RequestBody Book book, @RequestBody Author author) throws SQLException{
 		bdao.deleteAuthorFromBook(book, author);
 	}
 	
-	public void removeBookGenre(Book book, Genre genre) throws SQLException{
+	@RequestMapping(value = "/deleteBookGenre", method = RequestMethod.POST, consumes="application/json")
+	public void removeBookGenre(@RequestBody Book book, @RequestBody Genre genre) throws SQLException{
 		bdao.deleteGenreFromBook(book, genre);
 	}
 	
-	public void editBookAuthors(Book book, ArrayList<Author> authors) throws SQLException{
+	@RequestMapping(value = "/editBookAuthors", method = RequestMethod.POST, consumes="application/json")
+	public void editBookAuthors(@RequestBody Book book, @RequestBody ArrayList<Author> authors) throws SQLException{
 		List<Author> removeAuthors = new ArrayList<>(book.getAuthors());
 		removeAuthors.removeAll(authors);
 
@@ -113,7 +118,9 @@ public class BookController {
 		}	
 	}
 
-	public void editBookGenres(Book book, ArrayList<Genre> genres) throws SQLException {
+	
+	@RequestMapping(value = "/editBookGenres", method = RequestMethod.POST, consumes="application/json")
+	public void editBookGenres(@RequestBody Book book, @RequestBody ArrayList<Genre> genres) throws SQLException {
 		List<Genre> removeGenres = new ArrayList<>(book.getGenres());
 		removeGenres.removeAll(genres);
 		

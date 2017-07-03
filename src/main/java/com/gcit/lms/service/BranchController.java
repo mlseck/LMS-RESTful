@@ -53,16 +53,18 @@ public class BranchController {
 		return brdao.readAllBranches(pageNo, searchString);
 	}
 	
-	@RequestMapping(value = "/getBranhByPK/{branchId}", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/getBranchByPK/{branchId}", method = RequestMethod.GET, produces="application/json")
 	public Branch getBranchById(@PathVariable Integer branchId) throws SQLException{
 		return brdao.getBranchByPK(branchId);
 	}
 	
-	public void addBookCopyToBranch(BookCopies bc) throws SQLException {
+	@RequestMapping(value = "/addBookToBranch", method = RequestMethod.POST, consumes="application/json")
+	public void addBookCopyToBranch(@RequestBody BookCopies bc) throws SQLException {
 		bcdao.addBookCopies(bc);
 	}
 	
-	public void addBookCopiesToBranch(List<Book> books, Branch branch)
+	@RequestMapping(value = "/addBooksToBranch", method = RequestMethod.POST, consumes="application/json")
+	public void addBookCopiesToBranch(@RequestBody List<Book> books, @RequestBody Branch branch)
 			throws SQLException {
 		for (Book book : books) {
 			BookCopies newCopy = new BookCopies();
@@ -73,20 +75,24 @@ public class BranchController {
 		}
 	}
 	
-	public void updateBookCopies(BookCopies bc) throws SQLException {
+	@RequestMapping(value = "/updateBookCopy", method = RequestMethod.POST, consumes="application/json")
+	public void updateBookCopies(@RequestBody BookCopies bc) throws SQLException {
 		bcdao.updateBookCopies(bc);
 	}
 	
-	public List<Book> getAllBooksInBranch(Branch br) throws SQLException {
-		return bdao.getBooksInBranch(br.getBranchId());
+	@RequestMapping(value = "/getBooksInBranch/{branchId}", method = RequestMethod.GET, produces="application/json")
+	public List<Book> getAllBooksInBranch(@PathVariable Integer branchId) throws SQLException {
+		return bdao.getBooksInBranch(branchId);
 	}
 
-	public List<BookCopies> getBookCopiesInBranch(Branch br)
+	@RequestMapping(value = "/getBookCopyInBranch/{branchId}", method = RequestMethod.GET, produces="application/json")
+	public List<BookCopies> getBookCopiesInBranch(@PathVariable Integer branchId)
 			throws SQLException {
-		return bcdao.getBookCopiesByBranchId(br.getBranchId());
+		return bcdao.getBookCopiesByBranchId(branchId);
 	}
 	
-	public BookCopies getBookCopiesByPK(Integer branchId, Integer bookId)
+	@RequestMapping(value = "/getBookCopyByPk/{branchId}/{bookId}", method = RequestMethod.GET, produces="application/json")
+	public BookCopies getBookCopiesByPK(@PathVariable Integer branchId, @PathVariable Integer bookId)
 			throws SQLException {
 		return bcdao.getBookCopiesByPK(bookId, branchId);
 	}
