@@ -15,8 +15,8 @@ import com.gcit.lms.dao.BorrowerDAO;
 import com.gcit.lms.entity.Borrower;
 
 @RestController
-public class AdminBorrowerService {
-	
+public class BorrowerController {
+
 	@Autowired
 	BorrowerDAO bodao;
 	
@@ -44,5 +44,4 @@ public class AdminBorrowerService {
 	public List<Borrower> getAllBorrowers(@PathVariable Integer pageNo, @PathVariable String searchString) throws SQLException{
 		return bodao.readAllBorrowers(pageNo, searchString);
 	}
-	
 }

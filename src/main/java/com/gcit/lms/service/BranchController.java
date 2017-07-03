@@ -11,14 +11,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gcit.lms.dao.BookCopiesDAO;
+import com.gcit.lms.dao.BookDAO;
 import com.gcit.lms.dao.BranchDAO;
+import com.gcit.lms.entity.Book;
+import com.gcit.lms.entity.BookCopies;
 import com.gcit.lms.entity.Branch;
 
 @RestController
-public class AdminBranchService {
-	
+public class BranchController {
+
 	@Autowired
 	BranchDAO brdao;
+	@Autowired
+	BookCopiesDAO bcdao;
+	@Autowired
+	BookDAO bdao;
 	
 	@Transactional
 	@RequestMapping(value = "/saveBranch", method = RequestMethod.POST, consumes="application/json")
@@ -50,4 +58,36 @@ public class AdminBranchService {
 		return brdao.getBranchByPK(branchId);
 	}
 	
+	public void addBookCopyToBranch(BookCopies bc) throws SQLException {
+		bcdao.addBookCopies(bc);
+	}
+	
+	public void addBookCopiesToBranch(List<Book> books, Branch branch)
+			throws SQLException {
+		for (Book book : books) {
+			BookCopies newCopy = new BookCopies();
+			newCopy.setBook(book);
+			newCopy.setBranch(branch);
+			newCopy.setCopies(0);
+			bcdao.addBookCopies(newCopy);
+		}
+	}
+	
+	public void updateBookCopies(BookCopies bc) throws SQLException {
+		bcdao.updateBookCopies(bc);
+	}
+	
+	public List<Book> getAllBooksInBranch(Branch br) throws SQLException {
+		return bdao.getBooksInBranch(br.getBranchId());
+	}
+
+	public List<BookCopies> getBookCopiesInBranch(Branch br)
+			throws SQLException {
+		return bcdao.getBookCopiesByBranchId(br.getBranchId());
+	}
+	
+	public BookCopies getBookCopiesByPK(Integer branchId, Integer bookId)
+			throws SQLException {
+		return bcdao.getBookCopiesByPK(bookId, branchId);
+	}
 }

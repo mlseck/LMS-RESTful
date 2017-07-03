@@ -8,12 +8,6 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.gcit.lms.dao.*;
-import com.gcit.lms.service.AdminBookService;
-import com.gcit.lms.service.AdminBorrowerService;
-import com.gcit.lms.service.AdminBranchService;
-import com.gcit.lms.service.AdminLoanService;
-import com.gcit.lms.service.BorrowerService;
-import com.gcit.lms.service.LibrarianService;
 
 @Configuration
 public class LMSConfig {
@@ -37,36 +31,6 @@ public class LMSConfig {
 	@Bean(name ="MySQL")
 	public JdbcTemplate template(){
 		return new JdbcTemplate(dataSource());
-	}
-	
-	@Bean
-	public AdminBookService adminBookService(){
-		return new AdminBookService();
-	}
-	
-	@Bean
-	public AdminBranchService adminBranchService(){
-		return new AdminBranchService();
-	}
-	
-	@Bean
-	public AdminBorrowerService adminBorrowerService(){
-		return new AdminBorrowerService();
-	}
-	
-	@Bean
-	public AdminLoanService adminLoanService(){
-		return new AdminLoanService();
-	}
-	
-	@Bean
-	public BorrowerService borrowerService(){
-		return new BorrowerService();
-	}
-	
-	@Bean
-	public LibrarianService librarianService(){
-		return new LibrarianService();
 	}
 	
 	@Bean
