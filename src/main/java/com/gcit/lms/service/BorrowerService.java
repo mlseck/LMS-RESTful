@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.gcit.lms.dao.BookCopiesDAO;
 import com.gcit.lms.dao.BookLoansDAO;
@@ -15,6 +16,7 @@ import com.gcit.lms.entity.BookLoans;
 import com.gcit.lms.entity.Borrower;
 import com.gcit.lms.entity.Branch;
 
+@RestController
 public class BorrowerService {
 	@Autowired
 	BorrowerDAO bodao;

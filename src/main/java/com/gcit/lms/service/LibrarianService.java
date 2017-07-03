@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.gcit.lms.dao.BookCopiesDAO;
 import com.gcit.lms.dao.BookDAO;
@@ -12,6 +13,7 @@ import com.gcit.lms.entity.Book;
 import com.gcit.lms.entity.BookCopies;
 import com.gcit.lms.entity.Branch;
 
+@RestController
 public class LibrarianService {
 	@Autowired
 	BranchDAO brdao;

@@ -5,6 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.gcit.lms.dao.AuthorDAO;
 import com.gcit.lms.dao.GenreDAO;
@@ -15,6 +21,7 @@ import com.gcit.lms.entity.Publisher;
 import com.gcit.lms.dao.BookDAO;
 import com.gcit.lms.entity.Book;
 
+@RestController
 public class AdminBookService {
 	
 	@Autowired
@@ -30,7 +37,9 @@ public class AdminBookService {
 	GenreDAO gdao;
 	
 	
-	public void saveAuthor(Author author) throws SQLException{	
+	@Transactional
+	@RequestMapping(value = "/saveAuthor", method = RequestMethod.POST, consumes="application/json")
+	public void saveAuthor(@RequestBody Author author) throws SQLException{	
 		if (author.getAuthorId() != null){
 			adao.updateAuthor(author);
 		} else{
@@ -38,7 +47,8 @@ public class AdminBookService {
 		}
 	}
 	
-	public void saveBook(Book book) throws SQLException{
+	@RequestMapping(value = "/saveBook", method = RequestMethod.POST, consumes="application/json")
+	public void saveBook(@RequestBody Book book) throws SQLException{
 		if(book.getBookId() != null){
 			bdao.updateBook(book);
 		} else{
@@ -46,19 +56,23 @@ public class AdminBookService {
 		}
 	}
 	
-	public Integer saveBookWithId(Book book) throws SQLException{
+	@RequestMapping(value = "/saveBookWithId", method = RequestMethod.POST, consumes="application/json", produces="application/json")
+	public Integer saveBookWithId(@RequestBody Book book) throws SQLException{
 		return bdao.addBookWithId(book);
 	}
 	
-	public void deleteAuthor(Author author) throws SQLException{
+	@RequestMapping(value = "/deleteAuthor", method = RequestMethod.POST, consumes="application/json")
+	public void deleteAuthor(@RequestBody Author author) throws SQLException{
 		adao.deleteAuthor(author);
 	}
 	
-	public void deleteBook(Book book) throws SQLException{
+	@RequestMapping(value = "/deleteBook", method = RequestMethod.POST, consumes="application/json")
+	public void deleteBook(@RequestBody Book book) throws SQLException{
 		bdao.deleteBook(book);
 	}
 	
-	public Book getBookByPK(Integer bookId) throws SQLException {
+	@RequestMapping(value = "/getBookByPK/{bookId}", method = RequestMethod.GET, produces="application/json")
+	public Book getBookByPK(@PathVariable Integer bookId) throws SQLException {
 		Book book = bdao.getBookByPK(bookId);
 		book.setPublisher(pdao.getBookPublisher(bookId));
 		book.setAuthors(adao.getAuthorsWithBook(bookId));
@@ -66,33 +80,39 @@ public class AdminBookService {
 		return book;
 	}
 	
-	public Author getAuthorByPK(Integer authorId) throws SQLException {
+	@RequestMapping(value = "/getAuthorByPK/{authorId}", method = RequestMethod.GET, produces="application/json")
+	public Author getAuthorByPK(@PathVariable Integer authorId) throws SQLException {
 		Author author = adao.getAuthorByPK(authorId);
 		author.setBooks(bdao.getBooksWithAuthor(authorId));
 		return author;
 	}
 	
-	public Publisher getPublisherByPK(Integer pubId) throws SQLException {
+	@RequestMapping(value = "/getPublisherByPK/{pubId}", method = RequestMethod.GET, produces="application/json")
+	public Publisher getPublisherByPK(@PathVariable Integer pubId) throws SQLException {
 		Publisher publisher = pdao.getPublisherByPK(pubId);
 		publisher.setBooks(bdao.getBooksWithPublisher(pubId));
 		return publisher;
 	}
-	
-	public Genre getGenreByPK(Integer genreId) throws SQLException {
+
+	@RequestMapping(value = "/getGenreByPK/{genreId}", method = RequestMethod.GET, produces="application/json")
+	public Genre getGenreByPK(@PathVariable Integer genreId) throws SQLException {
 		Genre genre = gdao.getGenreByPK(genreId);
 		genre.setBooks(bdao.getBooksWithGenre(genreId));
 		return genre;
 	}
 	
+	@RequestMapping(value = "/getAuthorsCount", method = RequestMethod.GET, produces="application/json")
 	public Integer getAuthorsCount() throws SQLException {
 		return adao.getAuthorsCount();
 	}
 	
+	@RequestMapping(value = "/getBooksCount", method = RequestMethod.GET, produces="application/json")
 	public Integer getBooksCount() throws SQLException {
 		return bdao.getBooksCount();
 	}
 	
-	public List<Author> getAllAuthors(Integer pageNo, String searchString) throws SQLException{
+	@RequestMapping(value = "/getAuthors/{pageNo}/{searchString}", method = RequestMethod.GET, produces="application/json")
+	public List<Author> getAllAuthors(@PathVariable Integer pageNo, @PathVariable String searchString) throws SQLException{
 		List<Author> authors = adao.readAllAuthors(pageNo, searchString);
 		for(Author a:authors){
 			a.setBooks(bdao.getBooksWithAuthor(a.getAuthorId()));
@@ -100,7 +120,8 @@ public class AdminBookService {
 		return authors;
 	}
 	
-	public List<Book> getAllBooks(Integer pageNo, String searchString) throws SQLException{
+	@RequestMapping(value = "/getBooks/{pageNo}/{searchString}", method = RequestMethod.GET, produces="application/json")
+	public List<Book> getAllBooks(@PathVariable Integer pageNo, @PathVariable String searchString) throws SQLException{
 		List<Book> books = bdao.readAllBooks(pageNo, searchString);
 		for (Book b:books){
 			b.setAuthors(adao.getAuthorsWithBook(b.getBookId()));
@@ -112,7 +133,8 @@ public class AdminBookService {
 		return books;
 	}
 	
-	public void savePublisher(Publisher publisher) throws SQLException{
+	@RequestMapping(value = "/savePublisher", method = RequestMethod.POST, consumes="application/json")
+	public void savePublisher(@RequestBody Publisher publisher) throws SQLException{
 		if (publisher.getPublisherId() != null){
 				pdao.updatePublisher(publisher);
 		}else{
@@ -120,16 +142,18 @@ public class AdminBookService {
 		}
 	}
 	
-	
-	public void deletePublisher(Publisher publisher) throws SQLException{
+	@RequestMapping(value = "/deletePublisher", method = RequestMethod.POST, consumes="application/json")
+	public void deletePublisher(@RequestBody Publisher publisher) throws SQLException{
 		pdao.deletePublisher(publisher);
 	}
 	
+	@RequestMapping(value = "/getPublishersCount", method = RequestMethod.GET, produces="application/json")
 	public Integer getPublishersCount() throws SQLException {
 		return pdao.getPublishersCount();
 	}
 	
-	public List<Publisher> getAllPublishers(Integer pageNo, String searchString) throws SQLException{
+	@RequestMapping(value = "/getPublishers/{pageNo}/{searchString}", method = RequestMethod.GET, produces="application/json")
+	public List<Publisher> getAllPublishers(@PathVariable Integer pageNo, @PathVariable String searchString) throws SQLException{
 		List<Publisher> publishers = pdao.readAllPublishers(pageNo, searchString);
 		for (Publisher p:publishers){
 			p.setBooks(bdao.getBooksWithPublisher(p.getPublisherId()));
@@ -137,6 +161,7 @@ public class AdminBookService {
 		return publishers;
 	}
 	
+	@RequestMapping(value = "/saveGenre", method = RequestMethod.POST, consumes="application/json")
 	public void saveGenre(Genre genre) throws SQLException{
 		if (genre.getGenreId() != null){
 				gdao.updateGenre(genre);
@@ -145,6 +170,7 @@ public class AdminBookService {
 		}
 	}
 	
+	@RequestMapping(value = "/deleteGenre", method = RequestMethod.POST, consumes="application/json")
 	public void deleteGenre(Genre genre) throws SQLException{
 		gdao.deleteGenre(genre);
 	}
@@ -153,7 +179,8 @@ public class AdminBookService {
 		return gdao.getGenresCount();
 	}
 	
-	public List<Genre> getAllGenres(Integer pageNo, String searchString) throws SQLException{
+	@RequestMapping(value = "/getGenres/{pageNo}/{searchString}", method = RequestMethod.GET, produces="application/json")
+	public List<Genre> getAllGenres(@PathVariable Integer pageNo, @PathVariable String searchString) throws SQLException{
 		List<Genre> genres = gdao.readAllGenres(pageNo, searchString);
 		for (Genre g:genres){
 			g.setBooks(bdao.getBooksWithGenre(g.getGenreId()));

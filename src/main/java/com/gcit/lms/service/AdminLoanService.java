@@ -6,14 +6,17 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.gcit.lms.dao.BookLoansDAO;
 import com.gcit.lms.entity.BookLoans;
 import com.gcit.lms.entity.Borrower;
 
+@RestController
 public class AdminLoanService {
 	@Autowired
 	BookLoansDAO bldao;
+	
 	
 	public List<BookLoans> getLoansFromBorrower(Borrower b) throws SQLException{
 		return bldao.getBookLoansByCardNo(b.getCardNo());
