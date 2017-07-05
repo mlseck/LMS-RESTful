@@ -24,17 +24,25 @@ public class AuthorController {
 	BookDAO bdao;
 	
 	@Transactional
-	@RequestMapping(value = "/saveAuthor", method = RequestMethod.POST, consumes="application/json")
-	public void saveAuthor(@RequestBody Author author) throws SQLException{	
-		if (author.getAuthorId() != null){
-			adao.updateAuthor(author);
-		} else{
-			adao.addAuthor(author);
-		}
+	@RequestMapping(value = "/author/insert/{authorName}", method = RequestMethod.POST, consumes="application/json")
+	public void insertAuthor(@PathVariable String authorName) throws SQLException{	
+		Author author = new Author();
+		author.setAuthorName(authorName);
+		adao.addAuthor(author);
 	}
 	
-	@RequestMapping(value = "/deleteAuthor", method = RequestMethod.POST, consumes="application/json")
-	public void deleteAuthor(@RequestBody Author author) throws SQLException{
+	@RequestMapping(value = "/author/update/{authorId}/{authorName}", method = RequestMethod.POST, consumes="application/json")
+	public void updateAuthor(@PathVariable int authorId, @PathVariable String authorName) throws SQLException{	
+		Author author = new Author();
+		author.setAuthorId(authorId);
+		author.setAuthorName(authorName);
+		adao.updateAuthor(author);
+	}
+	
+	@RequestMapping(value = "/author/delete/{authorId}", method = RequestMethod.POST, consumes="application/json")
+	public void deleteAuthor(@PathVariable int authorId) throws SQLException{
+		Author author = new Author();
+		author.setAuthorId(authorId);
 		adao.deleteAuthor(author);
 	}
 	

@@ -61,7 +61,7 @@ public class LoanController {
 		bldao.updateBookLoans(l);
 	}
 	
-	@RequestMapping(value = "/getLoansFromBorrower/{borrowerId}", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/getLoansFromBorrower/{cardNo}", method = RequestMethod.GET, produces="application/json")
 	public List<BookLoans> getLoansFromBorrower(@PathVariable Integer cardNo) throws SQLException{
 		return bldao.getBookLoansByCardNo(cardNo);
 	}
