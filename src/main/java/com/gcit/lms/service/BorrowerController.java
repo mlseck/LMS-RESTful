@@ -21,7 +21,7 @@ public class BorrowerController {
 	BorrowerDAO bodao;
 	
 	@Transactional
-	@RequestMapping(value = "/saveBorrower", method = RequestMethod.POST, consumes="application/json")
+	@RequestMapping(value = "/borrower/save", method = RequestMethod.POST, consumes="application/json")
 	public void saveBorrower(@RequestBody Borrower borrower) throws SQLException{
 		if (borrower.getCardNo() != null){
 				bodao.updateBorrower(borrower);
@@ -30,17 +30,17 @@ public class BorrowerController {
 		}
 	}
 	
-	@RequestMapping(value = "/deleteBorrower", method = RequestMethod.POST, consumes="application/json")
+	@RequestMapping(value = "/borrower/delete", method = RequestMethod.POST, consumes="application/json")
 	public void deleteBorrower(Borrower borrower) throws SQLException{
 		bodao.deleteBorrower(borrower);
 	}
 	
-	@RequestMapping(value = "/getBorrowersCount", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/borrower/getCount", method = RequestMethod.GET, produces="application/json")
 	public Integer getBorrowersCount() throws SQLException {
 		return bodao.getBorrowersCount();
 	}
 	
-	@RequestMapping(value = "/getBorrowers/{pageNo}/{searchString}", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/borrower/getBorrowers/{pageNo}/{searchString}", method = RequestMethod.GET, produces="application/json")
 	public List<Borrower> getAllBorrowers(@PathVariable Integer pageNo, @PathVariable String searchString) throws SQLException{
 		return bodao.readAllBorrowers(pageNo, searchString);
 	}

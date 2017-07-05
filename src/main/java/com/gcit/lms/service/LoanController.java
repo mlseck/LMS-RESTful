@@ -27,7 +27,7 @@ public class LoanController {
 	BookCopiesDAO bcdao;
 	
 	@Transactional
-	@RequestMapping(value = "/checkOutBook", method = RequestMethod.POST, consumes="application/json")
+	@RequestMapping(value = "/loan/checkOut", method = RequestMethod.POST, consumes="application/json")
 	public void checkOutBook(@RequestBody BookCopies bc, @RequestBody Borrower br) throws SQLException{
 		BookLoans bl = new BookLoans();
 		bl.setBook(bc.getBook());
@@ -39,7 +39,7 @@ public class LoanController {
 		bldao.addBookLoans(bl);
 	}
 	
-	@RequestMapping(value = "/returnBook", method = RequestMethod.POST, consumes="application/json")
+	@RequestMapping(value = "/loan/return", method = RequestMethod.POST, consumes="application/json")
 	public void returnBook(@RequestBody BookLoans bl) throws SQLException{
 		
 		BookCopies bc = new BookCopies();
@@ -52,7 +52,7 @@ public class LoanController {
 		bcdao.updateBookCopies(bc);
 	}
 	
-	@RequestMapping(value = "/overwriteLoan", method = RequestMethod.POST, consumes="application/json")
+	@RequestMapping(value = "/loan/overwrite", method = RequestMethod.POST, consumes="application/json")
 	public void overwriteLoan(@RequestBody BookLoans l) throws SQLException{
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
 		String date = l.getDueDate();
@@ -61,22 +61,22 @@ public class LoanController {
 		bldao.updateBookLoans(l);
 	}
 	
-	@RequestMapping(value = "/getLoansFromBorrower/{cardNo}", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/loan/getLoansFromBorrower/{cardNo}", method = RequestMethod.GET, produces="application/json")
 	public List<BookLoans> getLoansFromBorrower(@PathVariable Integer cardNo) throws SQLException{
 		return bldao.getBookLoansByCardNo(cardNo);
 	}
 	
-	@RequestMapping(value = "/getLoanByPk/{cardNo}/{bookId}/{branchId}/{dateOut}", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/loan/getLoanById/{cardNo}/{bookId}/{branchId}/{dateOut}", method = RequestMethod.GET, produces="application/json")
 	public BookLoans getLoanByPK(@PathVariable Integer cardNo, @PathVariable Integer bookId, @PathVariable Integer branchId, @PathVariable String dateOut) throws SQLException{
 		return bldao.getBookLoansByPK(bookId, branchId, cardNo, dateOut);
 	}
 	
-	@RequestMapping(value = "/getLoansCount", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/loan/getCount", method = RequestMethod.GET, produces="application/json")
 	public Integer getLoansCount() throws SQLException {
 		return bldao.getBookLoansCount();
 	}
 	
-	@RequestMapping(value = "/getLoans/{pageNo}/{searchString}", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/loan/getLoans/{pageNo}/{searchString}", method = RequestMethod.GET, produces="application/json")
 	public List<BookLoans> getAllLoans(@PathVariable Integer pageNo, @PathVariable String searchString) throws SQLException{
 		return bldao.readAllBookLoans(pageNo, searchString);
 	}

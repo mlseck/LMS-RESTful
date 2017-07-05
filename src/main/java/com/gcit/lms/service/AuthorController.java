@@ -24,41 +24,33 @@ public class AuthorController {
 	BookDAO bdao;
 	
 	@Transactional
-	@RequestMapping(value = "/author/insert/{authorName}", method = RequestMethod.POST, consumes="application/json")
-	public void insertAuthor(@PathVariable String authorName) throws SQLException{	
-		Author author = new Author();
-		author.setAuthorName(authorName);
-		adao.addAuthor(author);
+	@RequestMapping(value = "/author/save", method = RequestMethod.POST, consumes="application/json")
+	public void saveAuthor(@RequestBody Author author) throws SQLException{	
+		if(author.getAuthorId() != null){
+			adao.updateAuthor(author);
+		} else{
+			adao.addAuthor(author);
+		}
 	}
 	
-	@RequestMapping(value = "/author/update/{authorId}/{authorName}", method = RequestMethod.POST, consumes="application/json")
-	public void updateAuthor(@PathVariable int authorId, @PathVariable String authorName) throws SQLException{	
-		Author author = new Author();
-		author.setAuthorId(authorId);
-		author.setAuthorName(authorName);
-		adao.updateAuthor(author);
-	}
-	
-	@RequestMapping(value = "/author/delete/{authorId}", method = RequestMethod.POST, consumes="application/json")
-	public void deleteAuthor(@PathVariable int authorId) throws SQLException{
-		Author author = new Author();
-		author.setAuthorId(authorId);
+	@RequestMapping(value = "/author/delete", method = RequestMethod.POST, consumes="application/json")
+	public void deleteAuthor(@RequestBody Author author) throws SQLException{
 		adao.deleteAuthor(author);
 	}
 	
-	@RequestMapping(value = "/getAuthorByPK/{authorId}", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/author/getAuthor/{authorId}", method = RequestMethod.GET, produces="application/json")
 	public Author getAuthorByPK(@PathVariable Integer authorId) throws SQLException {
 		Author author = adao.getAuthorByPK(authorId);
 		author.setBooks(bdao.getBooksWithAuthor(authorId));
 		return author;
 	}
 	
-	@RequestMapping(value = "/getAuthorsCount", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/author/getCount", method = RequestMethod.GET, produces="application/json")
 	public Integer getAuthorsCount() throws SQLException {
 		return adao.getAuthorsCount();
 	}
 	
-	@RequestMapping(value = "/getAuthors/{pageNo}/{searchString}", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "author/getAuthors/{pageNo}/{searchString}", method = RequestMethod.GET, produces="application/json")
 	public List<Author> getAllAuthors(@PathVariable Integer pageNo, @PathVariable String searchString) throws SQLException{
 		List<Author> authors = adao.readAllAuthors(pageNo, searchString);
 		for(Author a:authors){
