@@ -25,7 +25,7 @@ public class PublisherController {
 	PublisherDAO pdao;
 	
 	@Transactional
-	@RequestMapping(value = "/publisher/save", method = RequestMethod.POST, consumes="application/json")
+	@RequestMapping(value = "/publishers/", method = RequestMethod.PUT, consumes="application/json")
 	public void savePublisher(@RequestBody Publisher publisher) throws SQLException{
 		if (publisher.getPublisherId() != null){
 				pdao.updatePublisher(publisher);
@@ -34,24 +34,24 @@ public class PublisherController {
 		}
 	}
 	
-	@RequestMapping(value = "/publisher/getByPK/{pubId}", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/publishers/{pubId}", method = RequestMethod.GET, produces="application/json")
 	public Publisher getPublisherByPK(@PathVariable Integer pubId) throws SQLException {
 		Publisher publisher = pdao.getPublisherByPK(pubId);
 		publisher.setBooks(bdao.getBooksWithPublisher(pubId));
 		return publisher;
 	}
 	
-	@RequestMapping(value = "/publisher/delete", method = RequestMethod.POST, consumes="application/json")
+	@RequestMapping(value = "/publishers/", method = RequestMethod.DELETE, consumes="application/json")
 	public void deletePublisher(@RequestBody Publisher publisher) throws SQLException{
 		pdao.deletePublisher(publisher);
 	}
 	
-	@RequestMapping(value = "/publisher/getCount", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/publishers/count", method = RequestMethod.GET, produces="application/json")
 	public Integer getPublishersCount() throws SQLException {
 		return pdao.getPublishersCount();
 	}
 	
-	@RequestMapping(value = "/publisher/getPublishers/{pageNo}/{searchString}", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/publishers/{pageNo}/{searchString}", method = RequestMethod.GET, produces="application/json")
 	public List<Publisher> getAllPublishers(@PathVariable Integer pageNo, @PathVariable String searchString) throws SQLException{
 		List<Publisher> publishers = pdao.readAllPublishers(pageNo, searchString);
 		for (Publisher p:publishers){

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gcit.lms.dao.BorrowerDAO;
+import com.gcit.lms.entity.Author;
 import com.gcit.lms.entity.Borrower;
 
 @RestController
@@ -21,7 +22,7 @@ public class BorrowerController {
 	BorrowerDAO bodao;
 	
 	@Transactional
-	@RequestMapping(value = "/borrower/save", method = RequestMethod.POST, consumes="application/json")
+	@RequestMapping(value = "/borrowers/", method = RequestMethod.PUT, consumes="application/json")
 	public void saveBorrower(@RequestBody Borrower borrower) throws SQLException{
 		if (borrower.getCardNo() != null){
 				bodao.updateBorrower(borrower);
@@ -30,17 +31,23 @@ public class BorrowerController {
 		}
 	}
 	
-	@RequestMapping(value = "/borrower/delete", method = RequestMethod.POST, consumes="application/json")
+	@RequestMapping(value = "/borrowers/", method = RequestMethod.DELETE, consumes="application/json")
 	public void deleteBorrower(Borrower borrower) throws SQLException{
 		bodao.deleteBorrower(borrower);
 	}
 	
-	@RequestMapping(value = "/borrower/getCount", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/borrowers/count", method = RequestMethod.GET, produces="application/json")
 	public Integer getBorrowersCount() throws SQLException {
 		return bodao.getBorrowersCount();
 	}
 	
-	@RequestMapping(value = "/borrower/getBorrowers/{pageNo}/{searchString}", method = RequestMethod.GET, produces="application/json")
+	@RequestMapping(value = "/borrowers/{cardNo}", method = RequestMethod.GET, produces="application/json")
+	public Borrower getBorrowerByPK(@PathVariable Integer cardNo) throws SQLException {
+		Borrower borrower = bodao.getBorrowerByPK(cardNo);
+		return borrower;
+	}
+	
+	@RequestMapping(value = "/borrowers/{pageNo}/{searchString}", method = RequestMethod.GET, produces="application/json")
 	public List<Borrower> getAllBorrowers(@PathVariable Integer pageNo, @PathVariable String searchString) throws SQLException{
 		return bodao.readAllBorrowers(pageNo, searchString);
 	}
